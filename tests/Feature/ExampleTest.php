@@ -15,8 +15,15 @@ class ExampleTest extends TestCase
     public function test_example()
     {
         // $response = $this->get('/');
-
         // $response->assertStatus(200);
-        dump($this);
+
+        // dump($this);
+
+        // fwrite(STDOUT, app()->environment());
+
+        // fwrite(STDOUT, env('APP_ENV'));
+        // fwrite(STDOUT, env('CACHE_DRIVER'));
+
+        print_r($_ENV);
     }
 }
