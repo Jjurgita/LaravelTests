@@ -22,9 +22,9 @@ class BookManagementTest extends TestCase
         // when
         $response = $this->post('/books', $bookData);
         // then
-        $response->assertStatus(200);
+        // $response->assertStatus(200);
         $this->assertCount(1, Book::all());
-
+        $response->assertRedirect('/books/' . $bookData['isbn']);
 
         // $response = $this->post('/books', [
         //     'isbn' => 9780840700551,
@@ -77,9 +77,29 @@ class BookManagementTest extends TestCase
         $response = $this->put('/books/' . $updatedBookData['isbn'], $updatedBookData);
 
         // then
-        $response->assertStatus(200);
+        // $response->assertStatus(200);
         $this->assertCount(1, Book::all());
         $this->assertEquals($updatedBookData['isbn'], Book::first()->isbn);
         $this->assertEquals($updatedBookData['title'], Book::first()->title);
+        $response->assertRedirect('/books/' . $bookData['isbn']);
+    }
+
+    /** @test */
+    public function book_can_be_deleted()
+    {
+        // given
+        $this->withoutExceptionHandling();
+        $bookData = ['isbn' => 9780840700551, 'title' => 'Holy Bible'];
+        $this->post('/books', $bookData);
+        // $this->assertCount(1, Book::all());
+
+        // when
+        $this->assertCount(1, Book::all()); // optional, we have already proved that this works above
+        $response = $this->delete('/books/' . $bookData['isbn']);
+
+        // then
+        // $response->assertStatus(200);
+        $this->assertCount(0, Book::all());
+        $response->assertRedirect('/books/');
     }
 }
